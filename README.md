@@ -22,7 +22,7 @@ The automation script extracts articles from the **Opinion** section of *El Paí
 
 ### 2️. Translation API Integration
 
-* Uses MyMemory Translation API (configurable)
+* Uses RapidApi Translation 
 * Translates article titles from Spanish → English
 * Prints translated titles
 
@@ -87,6 +87,8 @@ Set environment variables:
 ```
 setx BROWSERSTACK_USERNAME "your_username"
 setx BROWSERSTACK_ACCESS_KEY "your_access_key"
+setx RAPIDAPI_KEY "your_api_key_here"
+
 ```
 
 **Mac/Linux:**
@@ -94,6 +96,7 @@ setx BROWSERSTACK_ACCESS_KEY "your_access_key"
 ```
 export BROWSERSTACK_USERNAME=your_username
 export BROWSERSTACK_ACCESS_KEY=your_access_key
+setx RAPIDAPI_KEY "your_api_key_here"
 ```
 
 Restart terminal after setting variables.
@@ -145,7 +148,6 @@ mvn clean test
 
 ## 📌 Notes
 
-* Translation API can be replaced with Google Translate API if required.
 * Script includes explicit waits for stability across desktop and mobile devices.
 * Designed for reliability in cloud execution environments.
 
