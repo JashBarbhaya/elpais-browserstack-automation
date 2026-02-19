@@ -208,29 +208,35 @@ public class ElPaisTest {
     private String translateToEnglish(String text) {
 
         try {
-            String encodedText = java.net.URLEncoder.encode(text, "UTF-8");
 
-            String response = io.restassured.RestAssured.given()
-                    .get("https://api.mymemory.translated.net/get?q="
-                            + encodedText + "&langpair=es|en")
+            String apiKey = System.getenv("RAPIDAPI_KEY");
+
+            org.json.JSONObject requestBody = new org.json.JSONObject();
+            requestBody.put("from", "es");
+            requestBody.put("to", "en");
+
+            org.json.JSONArray textArray = new org.json.JSONArray();
+            textArray.put(text);
+
+            requestBody.put("q", textArray);
+
+            String response = io.restassured.RestAssured
+                    .given()
+                    .header("Content-Type", "application/json")
+                    .header("X-RapidAPI-Host", "rapid-translate-multi-traduction.p.rapidapi.com")
+                    .header("X-RapidAPI-Key", apiKey)
+                    .body(requestBody.toString())
+                    .post("https://rapid-translate-multi-traduction.p.rapidapi.com/t")
                     .then()
                     .extract()
                     .asString();
 
-            org.json.JSONObject json = new org.json.JSONObject(response);
+            org.json.JSONArray jsonResponse = new org.json.JSONArray(response);
 
-            String translated = json.getJSONObject("responseData")
-                    .getString("translatedText");
-
-            // Properly decode URL encoding
-            translated = java.net.URLDecoder.decode(translated, "UTF-8");
-
-            // Replace '+' with space manually
-            translated = translated.replace("+", " ");
-
-            return translated.trim();
+            return jsonResponse.getString(0);
 
         } catch (Exception e) {
+            System.out.println("Translation failed.");
             return text;
         }
     }
